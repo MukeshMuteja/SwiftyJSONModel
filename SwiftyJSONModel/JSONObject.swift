@@ -65,13 +65,13 @@ struct JSONArray<T: JSONRepresentable>: JSONRepresentable {
 }
 
 public extension Array where Element: JSONRepresentable {
-    public var jsonRepresantable: JSONRepresentable {
+     var jsonRepresantable: JSONRepresentable {
         return JSONArray(array: self)
     }
 }
 
 public extension Array where Element: JSONInitializable {
-    public init(json: JSON) throws {
+     init(json: JSON) throws {
         self = try json.arrayValue().lazy.enumerated().map({ index, json in
             do {
                 return try Element(json: json)
@@ -88,13 +88,13 @@ struct JSONDict<T: JSONRepresentable>: JSONRepresentable {
 }
 
 public extension Dictionary where Key == String, Value: JSONRepresentable {
-    public var jsonRepresantable: JSONRepresentable {
+     var jsonRepresantable: JSONRepresentable {
         return JSONDict<Value>(dict: self)
     }
 }
 
 public extension Dictionary where Key == String, Value: JSONInitializable {
-    public init(json: JSON) throws {
+     init(json: JSON) throws {
         self = try json.dictionaryValue().reduce(into: [:], { result, item in
             do {
                 result[item.key] = try Value(json: item.value)
@@ -106,38 +106,38 @@ public extension Dictionary where Key == String, Value: JSONInitializable {
 }
 
 public extension Date {
-    public func json(with transformer: DateTransformer) -> String {
+     func json(with transformer: DateTransformer) -> String {
         return transformer.string(form: self)
     }
 }
 
 public extension JSON {
-    public func value() throws -> Bool {
+     func value() throws -> Bool {
         guard let boolValue = bool else { throw JSONModelError.invalidElement }
         return boolValue
     }
     
-    public func value() throws -> Int {
+     func value() throws -> Int {
         guard let intValue = int else { throw JSONModelError.invalidElement }
         return intValue
     }
     
-    public func value() throws -> Double {
+     func value() throws -> Double {
         guard let doubleValue = double else { throw JSONModelError.invalidElement }
         return doubleValue
     }
     
-    public func value() throws -> String {
+     func value() throws -> String {
         guard let stringValue = string else { throw JSONModelError.invalidElement }
         return stringValue
     }
     
-    public func arrayValue() throws -> [JSON] {
+     func arrayValue() throws -> [JSON] {
         guard let arrayValue = array else { throw JSONModelError.invalidElement }
         return arrayValue
     }
     
-    public func dictionaryValue() throws -> [String: JSON] {
+     func dictionaryValue() throws -> [String: JSON] {
         guard let dictValue = dictionary else { throw JSONModelError.invalidElement }
         return dictValue
     }
@@ -150,12 +150,12 @@ public protocol JSONString: RawRepresentable, JSONType {
 }
 
 public extension JSONString {
-    public init(json: JSON) throws {
+     init(json: JSON) throws {
         guard let object = Self.init(rawValue: try String(json: json) ) else { throw JSONModelError.invalidElement }
         self = object
     }
     
-    public var jsonValue: JSON { return rawValue.jsonValue }
+     var jsonValue: JSON { return rawValue.jsonValue }
 }
 
 public extension JSONObjectInitializable {
@@ -258,7 +258,7 @@ public struct JSONObject<PropertyType: RawRepresentable & Hashable>: JSONInitial
     
     // MARK: - Value for keypath - flattened array
     public func flatMap<T: JSONInitializable>(for keyPath: PropertyType...) throws -> [T] {
-        return try value(for: ArraySlice(keyPath)) { try $0.arrayValue().lazy.flatMap({ try? T(json: $0) }) }
+        return try value(for: ArraySlice(keyPath)) { try $0.arrayValue().lazy.compactMap({ try? T(json: $0) }) }
     }
     
     // MARK: - Optional methods
