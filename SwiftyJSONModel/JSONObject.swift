@@ -331,13 +331,7 @@ public indirect enum JSONModelError: Error, Equatable, CustomStringConvertible {
             return "Invalid format"
         case let .invalidValueFor(key: key, error):
             var stringValue = "[\(key)]"
-            
-            if case .invalidValueFor(_) = error {
-                stringValue.append(error.description)
-            } else {
-                stringValue.append(": \(error.description)")
-            }
-            
+            stringValue.append(": \(error.description)")
             return stringValue
         }
     }
