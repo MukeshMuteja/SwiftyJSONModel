@@ -11,6 +11,6 @@ Pod::Spec.new do |s|
 
   s.source = { :git => "https://github.com/alickbass/SwiftyJSONModel.git", :tag => s.version, :branch => 'master' }
   s.source_files = 'SwiftyJSONModel/*.swift'
-  s.dependency 'SwiftyJSON', '~> 4.0'
+  s.dependency 'SwiftyJSON', '~> 5.0.0'
 
 end
